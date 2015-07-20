@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.0.38">
+  <POU Name="MAIN" Id="{0e3a438c-9c40-4b9b-aad6-cb2f7d70fb75}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+bModbusTick : BOOL;
+fbReadRegs : FB_MBReadInputRegs;
+arr AT%MW0: ARRAY [0..2] OF WORD;
+ 
+dataStr : STRING;
+actualData AT%MW0: REAL;
+ 
+END_VAR 
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbReadRegs.sIPAddr := '192.168.1.101'; //gateway ip
+fbReadRegs.nTCPPort := MODBUS_TCP_PORT; //502
+fbReadRegs.nUnitID := 16#FF; //255
+fbReadRegs.nQuantity := 3; //3 words
+fbReadRegs.tTimeout := T#5S; //30 sec timout
+fbReadRegs.nMBAddr := 0;
+fbReadRegs.cbLength := 6;//nq*2
+fbReadRegs.pDestAddr := ADR(arr);
+fbReadRegs.bExecute := bModbusTick;
+bModbusTick := not bModbusTick;
+
+dataStr := CONCAT(DWORD_TO_HEXSTR(arr[1],4,TRUE),DWORD_TO_HEXSTR(arr[2],4,TRUE));
+ 
+fbReadRegs();
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
