@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.0.38">
+  <POU Name="MAIN" Id="{0e3a438c-9c40-4b9b-aad6-cb2f7d70fb75}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+str : STRING;
+poll : FB_ModbusPoll;
+actualData AT%MW0: REAL;
+t:REAL;
+END_VAR 
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+poll.ipAd := '192.168.1.101';
+poll.startAddr := 0;
+poll(dataStr => str);
+FPU.HexStrToReal(str := CONCAT('16#',str), f => t);
+FPU.HexStrToReal(str:=str , f=> t)
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
