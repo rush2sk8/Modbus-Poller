@@ -20,7 +20,9 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[fbReadRegs.sIPAddr := ipAd; //gateway ip
+      <ST><![CDATA[
+//setup the modbus block
+fbReadRegs.sIPAddr := ipAd; //gateway ip
 fbReadRegs.nTCPPort := MODBUS_TCP_PORT; //502
 fbReadRegs.nUnitID := 16#FF; //255
 fbReadRegs.nQuantity := 3; //3 words
@@ -35,6 +37,8 @@ fbReadRegs.bExecute := (bModbusTick := NOT bModbusTick);
 //uppercase(convert first number to hex + convert second number to hex)
 dataStr := F_TOUCase(CONCAT(WORD_TO_HEXSTR(arr[1],4,TRUE),WORD_TO_HEXSTR(arr[2],4,TRUE))); 
 fbReadRegs();
+
+//use converter to convert last 2 words to a fp value
 converter(str:=dataStr, out => value);]]></ST>
     </Implementation>
   </POU>
