@@ -1,2 +1,3 @@
 # Modbus-Poller
-polls the modbus data in ST for Beckhoff PLC
+Allows Beckhoff PLC fetch modbus data
+
