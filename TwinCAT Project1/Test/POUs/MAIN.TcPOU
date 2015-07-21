@@ -7,6 +7,8 @@ current : FB_ModbusPoll;
 temp 	: FB_ModbusPoll;
 tempValue	 : REAL;
 currentValue : REAL;
+bex : BOOL;
+
 END_VAR 
 ]]></Declaration>
     <Implementation>
@@ -14,8 +16,17 @@ END_VAR
 current.startAddr := 0;
 temp.ipAd         := '192.168.1.101';
 temp.startAddr 	  := 3;
+ 
+IF bex THEN
 temp   (value => tempValue	 );
-//current(value => currentValue);
+ELSE
+current(value => currentValue);
+END_IF
+
+bex := NOT bex;
+
+
+
 
 ]]></ST>
     </Implementation>
