@@ -3,18 +3,19 @@
   <POU Name="MAIN" Id="{0e3a438c-9c40-4b9b-aad6-cb2f7d70fb75}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
-poll : FB_ModbusPoll;
-data : Real;
+current : FB_ModbusPoll;
+temp 	: FB_ModbusPoll;
+tempValue	 : REAL;
+currentValue : REAL;
 END_VAR 
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-poll.ipAd := '192.168.1.101';
-poll.startAddr := 0;
-poll(value => data);
-
-
- 
+      <ST><![CDATA[current.ipAd      := '192.168.1.101';
+current.startAddr := 0;
+temp.ipAd         := '192.168.1.101';
+temp.startAddr 	  := 3;
+temp   (value => tempValue	 );
+//current(value => currentValue);
 
 ]]></ST>
     </Implementation>
