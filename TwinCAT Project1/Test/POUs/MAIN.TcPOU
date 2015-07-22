@@ -1,14 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.0.38">
   <POU Name="MAIN" Id="{0e3a438c-9c40-4b9b-aad6-cb2f7d70fb75}" SpecialFunc="None">
-    <Declaration><![CDATA[PROGRAM MAIN
+    <Declaration><![CDATA[PROGRAM MAIN //polls and logs data at a rate of 2.5 kb
 VAR
 current : FB_ModbusPoll;
 temp 	: FB_ModbusPoll;
 tempValue	 : REAL;
 currentValue : REAL;
+
+prevTempValue : REAL;
+prevCurrentValue: REAL;
+
 bex : BOOL;
 rex : BOOL;
+
+dataWriter : FB_CSV_Writer;
 
 END_VAR 
 ]]></Declaration>
@@ -17,12 +23,15 @@ END_VAR
 current.startAddr := 0;
 temp.ipAd         := '192.168.1.101';
 temp.startAddr 	  := 3;
+
+dataWriter(bWriteLine := FALSE, sFileName := 'data' , fDataPoint1 := tempValue , fDataPoint2 := currentValue);
  
 IF bex THEN
-temp   (value => tempValue	 );
+	temp(value => tempValue);
 ELSE
-current(value => currentValue);
+	current(value => currentValue);
 END_IF
+
 
 IF NOT bex THEN
 	bex := NOT bex;
@@ -32,7 +41,7 @@ END_IF
 
 rex := NOT rex;
 
-]]></ST>
+dataWriter(bWriteLine := TRUE, sFileName := 'data' , fDataPoint1 := tempValue , fDataPoint2 := currentValue);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
