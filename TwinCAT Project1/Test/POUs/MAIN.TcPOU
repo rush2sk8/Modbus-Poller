@@ -8,6 +8,7 @@ temp 	: FB_ModbusPoll;
 tempValue	 : REAL;
 currentValue : REAL;
 bex : BOOL;
+rex : BOOL;
 
 END_VAR 
 ]]></Declaration>
@@ -23,10 +24,13 @@ ELSE
 current(value => currentValue);
 END_IF
 
-bex := NOT bex;
+IF NOT bex THEN
+	bex := NOT bex;
+ELSE 
+	bex := rex;
+END_IF
 
-
-
+rex := NOT rex;
 
 ]]></ST>
     </Implementation>
