@@ -9,7 +9,7 @@ VAR_INPUT
 END_VAR
 
 VAR_OUTPUT
-	value : REAL;
+	value : REAL; //the modbus data
 END_VAR
 
 VAR
@@ -21,8 +21,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-//setup the modbus block
+      <ST><![CDATA[//setup the modbus block
 fbReadRegs.sIPAddr := ipAd; //gateway ip
 fbReadRegs.nTCPPort := MODBUS_TCP_PORT; //502
 fbReadRegs.nUnitID := 16#FF; //255
@@ -40,7 +39,7 @@ dataStr := F_TOUCase(CONCAT(WORD_TO_HEXSTR(arr[1],4,TRUE),WORD_TO_HEXSTR(arr[2],
 fbReadRegs();
 
 //use converter to convert last 2 words to a fp value
-converter(str:=dataStr, out => value);]]></ST>
+converter(str := dataStr, out => value);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
