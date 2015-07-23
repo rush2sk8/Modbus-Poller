@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.0.38">
   <POU Name="FB_CSV_Writer" Id="{de3ffce5-7103-4107-8fe5-2fdaccc4c976}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_CSV_Writer //matteao
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_CSV_Writer //Matt
 VAR_INPUT
-	bWriteLine:	BOOL;
-	sFileName:	STRING;
-	fDataPoint1:	REAL;
-	fDataPoint2:	REAL;
+	bWriteLine:	BOOL; //true if you want to write to the file
+	sFileName:	STRING; //name of the file to write
+	fDataPoint1:	REAL; //data point 1
+	fDataPoint2:	REAL; //data point 2
 END_VAR
 VAR_OUTPUT
 	bBusy:	BOOL;
@@ -14,15 +14,15 @@ VAR_OUTPUT
 	sError:	STRING;
 END_VAR
 VAR
-	fbFileOpen:	FB_FileOpen;
-	fbFilePuts:	FB_FilePuts;
-	fbFileClose: FB_FileClose;
+	fbFileOpen:	FB_FileOpen; //fb to open the file to begin appending
+	fbFilePuts:	FB_FilePuts; //fb to write to the file
+	fbFileClose: FB_FileClose; // closes the file
 	
-	rtWrite:	R_TRIG;
+	rtWrite:	R_TRIG; //trigger
 	
-	nState:	INT;
-	sTempPathName:	STRING;
-	sDataString:	STRING;
+	nState:	INT; //state to cycle to parts of appending
+	sTempPathName:	STRING; 
+	sDataString:	STRING; //string to write
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -41,10 +41,7 @@ CASE nState OF
 		END_IF		
 	
 	10:	(*Open File*)	
-		fbFileOpen(	sPathName := sTempPathName,
-					nMode := FOPEN_MODEAPPEND,
-					bExecute := TRUE,
-					tTimeOut := T#1S);
+		fbFileOpen(	sPathName := sTempPathName,nMode := FOPEN_MODEAPPEND,bExecute := TRUE,tTimeOut := T#1S);
 		IF NOT fbFileOpen.bBusy THEN
 			fbFileOpen(	bExecute := FALSE);
 			IF fbFileOpen.bError THEN
@@ -57,10 +54,7 @@ CASE nState OF
 		END_IF
 		
 	20:	(*Write Line To File*)
-		fbFilePuts(	hFile := fbFileOpen.hFile,
-					sLine := sDataString,
-					bExecute := TRUE,
-					tTimeout := T#1S);
+		fbFilePuts(	hFile := fbFileOpen.hFile,sLine := sDataString,bExecute := TRUE,tTimeout := T#1S);
 		IF NOT fbFilePuts.bBusy THEN
 			fbFilePuts(	bExecute := FALSE);
 			IF fbFilePuts.bError THEN
@@ -73,9 +67,7 @@ CASE nState OF
 		END_IF
 		
 	30:	(*Close File*)
-		fbFileClose(	hFile := fbFileOpen.hFile,
-						bExecute := TRUE,
-						tTimeout := T#1S);
+		fbFileClose(hFile := fbFileOpen.hFile,bExecute := TRUE,tTimeout := T#1S);
 		IF NOT fbFileClose.bBusy THEN
 			fbFileClose(	bExecute := FALSE);
 			IF fbFileClose.bError THEN

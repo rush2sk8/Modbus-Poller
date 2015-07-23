@@ -3,19 +3,19 @@
   <POU Name="MAIN" Id="{0e3a438c-9c40-4b9b-aad6-cb2f7d70fb75}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN //polls and logs data at a rate of .4 kb/s
 VAR
-current : FB_ModbusPoll;
-temp 	: FB_ModbusPoll;
-tempValue	 : REAL;
-currentValue : REAL;
+current : FB_ModbusPoll; //current poller
+temp 	: FB_ModbusPoll; // temperature poller
+tempValue	 : REAL;	 //value that holds temperature
+currentValue : REAL;	 //value that holds current
 
-bex : BOOL;
-rex : BOOL;
+bex : BOOL; //delay bit
+rex : BOOL;	//other delay bit
 
-dataWriter : FB_CSV_Writer;
+dataWriter : FB_CSV_Writer; //fb that writes data to a csv file 
 
-timer  : TON;
-intervalToSampleData : TIME := T#5s;
-exBit : BOOL := TRUE;
+timer  : TON; //timer to coordinate when to wirte to the file (basically the update rate of the modbus server)
+intervalToSampleData : TIME := T#5S; //modbus update rate
+exBit : BOOL := TRUE; //excute bit for the timer
 
 fileName: STRING := 'data';//changinng this will change the file otherwise it will overwrite the data
 END_VAR ]]></Declaration>
