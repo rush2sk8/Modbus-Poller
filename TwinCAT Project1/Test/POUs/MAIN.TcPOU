@@ -14,7 +14,7 @@ rex : BOOL;	//other delay bit
 dataWriter : FB_CSV_Writer; //fb that writes data to a csv file 
 
 timer  : TON; //timer to coordinate when to wirte to the file (basically the update rate of the modbus server)
-intervalToSampleData : TIME := T#5S; //modbus update rate
+intervalToSampleData : TIME := T#5S; //modbus update rate (lower rate = more disk usage)
 exBit : BOOL := TRUE; //excute bit for the timer
 
 fileName: STRING := 'data';//changinng this will change the file otherwise it will overwrite the data
