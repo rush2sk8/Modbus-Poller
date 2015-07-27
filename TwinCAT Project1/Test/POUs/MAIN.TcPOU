@@ -18,6 +18,8 @@ intervalToSampleData : TIME := T#5S; //modbus update rate (lower rate = more dis
 exBit : BOOL := TRUE; //excute bit for the timer
 
 fileName: STRING := 'data';//changinng this will change the file otherwise it will overwrite the data
+
+numberOfReadingsTaken : INT;//holds how many readings have been taken from initial download
 END_VAR ]]></Declaration>
     <Implementation>
       <ST><![CDATA[current.ipAd      := '192.168.1.101';
@@ -57,6 +59,8 @@ ELSE
 	exBit := FALSE;	
 	//write the data
 	dataWriter(bWriteLine := TRUE, sFileName := fileName , fDataPoint1 := tempValue , fDataPoint2 := currentValue);
+	//bump up the readings
+	numberOfReadingsTaken:=numberOfReadingsTaken+1;
 END_IF
 ]]></ST>
     </Implementation>
