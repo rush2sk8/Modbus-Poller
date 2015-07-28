@@ -1,68 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.0.38">
   <POU Name="MAIN" Id="{0e3a438c-9c40-4b9b-aad6-cb2f7d70fb75}" SpecialFunc="None">
-    <Declaration><![CDATA[PROGRAM MAIN //polls and logs data at a rate of .4 kb/s
+    <Declaration><![CDATA[PROGRAM MAIN 
 VAR
-current : FB_ModbusPoll; //current poller
-temp 	: FB_ModbusPoll; // temperature poller
-tempValue	 : REAL;	 //value that holds temperature
-currentValue : REAL;	 //value that holds current
 
-bex : BOOL; //delay bit
-rex : BOOL;	//other delay bit
-
-dataWriter : FB_CSV_Writer; //fb that writes data to a csv file 
-
-timer  : TON; //timer to coordinate when to wirte to the file (basically the update rate of the modbus server)
-intervalToSampleData : TIME := T#5S; //modbus update rate (lower rate = more disk usage)
-exBit : BOOL := TRUE; //excute bit for the timer
-
-fileName: STRING := 'data';//changinng this will change the file otherwise it will overwrite the data
-
-numberOfReadingsTaken : INT;//holds how many readings have been taken from initial download
+fbReadmb : FB_ReadModbus ;
+arr: ARRAY [0..1] OF MODBUS_DATA_MAP;
+data : ARRAY[0..1] OF REAL;
 END_VAR ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[current.ipAd      := '192.168.1.101';
-temp.ipAd         := '192.168.1.101';
-current.startAddr := 0;
-temp.startAddr 	  := 3;
+      <ST><![CDATA[arr[0]._ipAddress := '192.168.1.101';
+arr[1]._ipAddress := '192.168.1.101';
+arr[0]._startAddress := 0;
+arr[1]._startAddress := 12;
 
-//5 second timeout
-timer.PT := intervalToSampleData;
-
-IF bex THEN
-	temp(value => tempValue);
-ELSE
-	current(value => currentValue);
-END_IF
-
-//bit switching
-IF NOT bex THEN
-	bex := NOT bex;
-ELSE 
-	bex := rex;
-END_IF
-
-rex := NOT rex;
-
-//timer starts when execute bit is true
-timer(in:= exBit);
-
-//if it is running write false
-IF NOT timer.Q THEN
-	//start timer
-	exBit := TRUE;
-	//falseify the write line	
-	dataWriter(bWriteLine := FALSE, sFileName := fileName , fDataPoint1 := tempValue , fDataPoint2 := currentValue);
-ELSE	
-	//reset the bit to reset the timer
-	exBit := FALSE;	
-	//write the data
-	dataWriter(bWriteLine := TRUE, sFileName := fileName , fDataPoint1 := tempValue , fDataPoint2 := currentValue);
-	//bump up the readings
-	numberOfReadingsTaken:=numberOfReadingsTaken+1;
-END_IF
-]]></ST>
+fbReadmb(inputData := arr , dataArr => data);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
