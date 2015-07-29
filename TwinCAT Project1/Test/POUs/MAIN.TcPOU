@@ -5,16 +5,11 @@
 VAR
 
 fbReadmb : FB_ReadModbus ;
-arr: ARRAY [0..1] OF MODBUS_DATA_MAP;
+arr: ARRAY [0..1] OF MODBUS_DATA_MAP := [ (_ipAddress := '192.168.1.101', _startAddress := 0) , (_ipAddress := '192.168.1.101', _startAddress := 12) ];
 data : ARRAY[0..1] OF REAL;
 END_VAR ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[arr[0]._ipAddress := '192.168.1.101';
-arr[1]._ipAddress := '192.168.1.101';
-arr[0]._startAddress := 0;
-arr[1]._startAddress := 12;
-
-fbReadmb(inputData := arr , outputData => data);]]></ST>
+      <ST><![CDATA[fbReadmb(inputData := arr , outputData => data);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

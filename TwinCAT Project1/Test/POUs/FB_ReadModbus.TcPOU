@@ -36,7 +36,6 @@ mb1.startAddr := inputData[0]._startAddress;
 mb2.ipAd := inputData[1]._ipAddress;
 mb2.startAddr := inputData[1]._startAddress;
 
-
 //5 second timeout
 timer.PT := intervalToSampleData;
 
@@ -71,8 +70,7 @@ ELSE
 	dataWriter(bWriteLine := TRUE, sFileName := fileName , fDataPoint1 := outputData[0] , fDataPoint2 := outputData[1]);
 	//bump up the readings
 	numberOfReadingsTaken:=numberOfReadingsTaken+1;
-END_IF
-]]></ST>
+END_IF]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
