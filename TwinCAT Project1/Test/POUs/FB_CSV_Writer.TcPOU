@@ -20,6 +20,9 @@ VAR
 	
 	rtWrite:	R_TRIG; //trigger
 	
+	fbGetSystemTime : GETSYSTEMTIME;
+	fileTime : T_FILETIME;
+	
 	nState:	INT; //state to cycle to parts of appending
 	sTempPathName:	STRING; 
 	sDataString:	STRING; //string to write
@@ -33,7 +36,8 @@ CASE nState OF
 		bBusy := FALSE;
 		IF rtWrite.Q THEN
 			sTempPathName := CONCAT(CONCAT('C:\Temp\',sFileName),'.csv');
-			sDataString := CONCAT(CONCAT(CONCAT(REAL_TO_STRING(fDataPoint1),','),REAL_TO_STRING(fDataPoint2)),'$N'); 
+			fbGetSystemTime(timeLoDW=>fileTime.dwLowDateTime, timeHiDW=>fileTime.dwHighDateTime );
+			sDataString := CONCAT(CONCAT(CONCAT( CONCAT(CONCAT(REAL_TO_STRING(fDataPoint1),',') ,REAL_TO_STRING(fDataPoint2)),','),SYSTEMTIME_TO_STRING( FILETIME_TO_SYSTEMTIME( fileTime ) ) ),'$N'); 
 			bBusy := TRUE;
 			bError := FALSE;
 			sError := '';
