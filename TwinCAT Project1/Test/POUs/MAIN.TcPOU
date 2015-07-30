@@ -9,7 +9,7 @@ arr: ARRAY [0..1] OF MODBUS_DATA_MAP := [ (_ipAddress := '192.168.1.101', _start
 data : ARRAY[0..1] OF REAL;
 END_VAR ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[fbReadmb(inputData := arr , outputData => data);]]></ST>
+      <ST><![CDATA[fbReadmb(inputData := arr , intervalToSampleData:= T#5s, outputData => data);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
